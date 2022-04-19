@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 from config import config
 import datetime
+from Models.login import validateUSer
 
 app = Flask(__name__)
 CORS(app)
@@ -27,8 +28,10 @@ def Login():
 
 @app.route('/login',methods=['POST'])
 def PostLogin():
-    print(request.form['uname'])
-    return "recibido"
+    user = validateUSer(request)
+
+    
+    return {'user':user} 
 
 
 
