@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
     <meta charset="UTF-8">
-    <title>FlaskApp</title>
+  
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <h2>Welcome to FlaskApp!</h2>
-    <h3>{{ utc_dt }}</h3>
+  <div class="contenedor-principal">        	
+
+    <div class="contenedor-menu">
+
+       <center> <h1 class="titulo-seccion">SISTEMA DE GESTION DE TURNOS</h1> </center>
+
+
+        <ul class="menu-ul" >
+
+            <li class="menu-li"><a href="">Visualizador de turnos</a></li>
+              <li class="menu-li"><a href="">Solicitar turno</a></li>
+              <li class="menu-li"><a href="register">Registrar usuario</a></li>
+              <li class="menu-li"><a href="">Registrar caja</a></li>
+              <li class="menu-li"><a href="">Informacionde la empresa</a></li>
+              <li class="menu-li"><a href="#" id="reset">Resetear turnos</a></li>
+
+          </ul>
+
+      </div><!--contenedor-->
+
+  </div><!--contenedor principal-->
+    
 </body>
 </html>
 
