@@ -1,44 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
-    
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
     <meta charset="UTF-8">
-    <title>login</title>
+  
 </head>
 <body>
+  <div class="contenedor-principal">        	
 
-    <h2>Modal Login Form</h2>
+    <div class="contenedor-menu">
 
-    <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+       <center> <h1 class="titulo-seccion">SISTEMA DE GESTION DE TURNOS</h1> </center>
+
+
+        <ul class="menu-ul" >
+
+            <li class="menu-li"><a href="">Visualizador de turnos</a></li>
+              <li class="menu-li"><a href="">Solicitar turno</a></li>
+              <li class="menu-li"><a href="register">Registrar usuario</a></li>
+              <li class="menu-li"><a href="cashier">Registrar caja</a></li>
+              <li class="menu-li"><a href="">Informacionde la empresa</a></li>
+              <li class="menu-li"><a href="#" id="reset">Resetear turnos</a></li>
+
+          </ul>
+
+      </div><!--contenedor-->
+
+  </div><!--contenedor principal-->
     
-    <div id="id01" class="modal">
-      
-      <form class="modal-content animate" action="/login" method="post">
-        <div class="imgcontainer">
-          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-          <img src="/static/images/user.png" alt="Avatar" class="avatar">
-        </div>
-    
-        <div class="container">
-          <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="username" required>
-    
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="password" required>
-            
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-        </div>
-    
-        <div class="container" style="background-color:#f1f1f1">
-          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-          <span class="psw">Forgot <a href="#">password?</a></span>
-        </div>
-      </form>
-    </div>
-    <script src="/static/js/script.js"></script>    
 </body>
 </html>
+

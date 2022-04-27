@@ -1,9 +1,12 @@
 
+from pickle import TRUE
 from flask import Flask, render_template, request,redirect, url_for
 from flask_cors import CORS
 from config import config
-from models.login import ValidateUser
-from models.register import InsertUser
+from helpers.login import ValidateUser
+from models.insert_user import InsertUser
+from models.insert_cashier import InsertCashier
+from helpers.cashier import select_cashier
 
 app = Flask(__name__)
 CORS(app)
@@ -24,7 +27,7 @@ def  menu():
     #     print(i)
     # if request.get_json() == 201:
     #     return render_template('layouts/index.html',message = "Usuario creado")
-    return render_template('layouts/index.html') 
+    return render_template('layouts/menu.html')
 
 @app.route('/')
 def Index():
@@ -49,12 +52,13 @@ def PostLogin():
 
 
 
-@app.route('/register',methods=['get'])
+@app.route('/register',methods=['GET'])
 def singup():
-
     if  request.args.get('messaje') or  request.args.get('user'):
         return render_template('layouts/register.html',message=request.args.get('messaje'),user=request.args.get('user')),403
-    return render_template('layouts/register.html')
+
+    
+    return render_template('layouts/register.html',data=select_cashier())
 
 
 @app.route('/register',methods=['POST'])
@@ -71,8 +75,16 @@ def PostRegister():
 
 @app.route('/cashier',methods=['GET'])
 def cashier():
-    print('hola')
-    return request
+    
+    return render_template('layouts/cashier.html')
+
+@app.route('/cashier',methods=['POST'])
+def cashier_post():
+    if InsertCashier(request.form['namecashier'])!= True:
+        return render_template('layouts/cashier.html',error ="Se ha producido un error")
+
+    return render_template('layouts/cashier.html',messaje = "Se ha creado la caja")
+
 
 
 @app.after_request

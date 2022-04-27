@@ -4,7 +4,7 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
     
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>register</title>
 </head>
 <body>
   <form action="/register" method="POST">
@@ -23,7 +23,17 @@
   
       <label for="email"><b>Usuario</b></label>
       <input type="text" placeholder="Ingresar Usurio" name="username" required>
-  
+      
+        <div class="input-group">
+            <span class="input-group-addon">Por favor seleccione una caja para el usuario</span>
+            <br>
+                <select name="comp_select" class="selectpicker form-control">
+                  
+                  {% for caja in data %}
+                    <option value="{{ caja.0 }}">{{ caja.1}}</option>
+                  {% endfor %}
+                </select>
+        </div>
       <label for="psw"><b>Contraseña</b></label>
       <input type="password" placeholder="Ingresar Contraseña" name="password" required>
         
