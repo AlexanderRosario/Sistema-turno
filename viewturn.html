@@ -5,39 +5,39 @@
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet"  href= "{{ url_for('static',filename='styles/style.css') }}">
     
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>solicitar turno</title>
 </head>
 
 <body>
   <!-- partial:index.partial.html -->
   <div class="pt-5">
-    <h1 class="text-center">Iniciar seccion</h1>
+    <h1 class="text-center">Ingrese su Identificacion y luego click en Aceptar</h1>
     
   <div class="container">
                   <div class="row">
                       <div class="col-md-5 mx-auto">
                           <div class="card card-body">
                                                       
-                              <form id="submitForm" action="/login" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
+                              <form id="submitForm" action="/getturn" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
                                   <div class="form-group required">
-                                      <lSabel for="username">Usuario </lSabel>
-                                      <input type="text" class="form-control text-lowercase" id="username" required="" name="username" value="">
+                                      <center><h3 for="cecula">Identificacion</h3></center>
+                                      {% if error %}
+                                      <p style="color:#FF0000";>{{error}}</p>
+                                      {%endif%}
+                                      <input type="text" class="form-control text-lowercase"  placeholder="000-0000000-0" id="username" name="ident" value="" minlength="5" maxlength="15" required >
                                   </div>   
-
                                   <div class="form-group required">
-                                      <label class="d-flex flex-row align-items-center" for="password">Contraseña</label>
-                                          <!-- <a class="ml-auto border-link small-xl" href="/forget-password">Forget?</a></label> -->
-                                      <input type="password" class="form-control" required="" id="password" name="password" value="">
-                                  </div>
-                                  
+                                    <center><lSabel for="description">Descripcion por la que esta aqui</lSabel></center>
+                                    <input type="text" class="form-control text-lowercase" placeholder="Opcional" id="description" required="" name="description" value="" >
+                                    </div> 
                                   <div class="form-group mt-4 mb-4">
                                       <div class="custom-control custom-checkbox">
                                           <input type="checkbox" class="custom-control-input" id="remember-me" name="remember-me" data-parsley-multiple="remember-me">
-                                          <label class="custom-control-label" for="remember-me">Recodar?</label>
+                                          
                                       </div>
                                   </div>
                                   <div class="form-group pt-1">
-                                      <button class="btn btn-primary btn-block" type="submit">Iniciar seccion</button>
+                                      <button class="btn btn-primary btn-block" type="submit">Aceptar</button>
                                   </div>
                               </form>
                           </div>

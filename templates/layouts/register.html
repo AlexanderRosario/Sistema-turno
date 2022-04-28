@@ -11,7 +11,6 @@
 
     <div class="container">
       <h1>RESGISTRATE</h1>
-      <p>Please fill in this form to create an account.</p>
       {% if user %}
       <H3 style="color:#FF0000";>{{user}} </H3>
       {% elif success %}
@@ -24,7 +23,7 @@
       <label for="email"><b>Usuario</b></label>
       <input type="text" placeholder="Ingresar Usurio" name="username" required>
       
-        <div class="input-group">
+      <div class="input-group">
             <span class="input-group-addon">Por favor seleccione una caja para el usuario</span>
             <br>
                 <select name="comp_select" class="selectpicker form-control">
@@ -33,7 +32,7 @@
                     <option value="{{ caja.0 }}">{{ caja.1}}</option>
                   {% endfor %}
                 </select>
-        </div>
+      </div>
       <label for="psw"><b>Contraseña</b></label>
       <input type="password" placeholder="Ingresar Contraseña" name="password" required>
         

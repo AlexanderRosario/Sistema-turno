@@ -76,6 +76,20 @@ CREATE TABLE CashierUsers (
   FOREIGN KEY (UserID) REFERENCES Users (UserID)
 ) 
 
+
+CREATE TABLE turns (
+  TurnsID INTEGER PRIMARY KEY AUTOINCREMENT,
+  Identification varchar(15) NOT NULL,
+  CreatedAt datetime DEFAULT (datetime('now')) NOT NULL ,
+  UpdateAt datetime ,
+  DeletedAt datetime,
+  status  varchar(15) DEFAULT "available" NOT NULL,
+  IsEnabled BOOLEAN NOT NULL  DEFAULT(true)
+) 
+
+-- Available
+-- Attending
+-- Finished
 -- --------------------------------------------------------
 
 --
