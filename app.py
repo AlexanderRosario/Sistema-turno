@@ -145,8 +145,8 @@ def NextTurn():
     if InsertAttendedTurn(request.form['userid'],request.form['num_turn'],request.form['description']) != True:
         # no se pudo finalizar la transacion
 
-        return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir seccion" )
-    num_turn = SelectShift()
+        return render_template('layouts/cashier_service.html',cashiername = request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir seccion" )
+    num_turn = SelectShift(request.form['userid'])
 
     if not num_turn:
         # no puedo encontrar un tur no nuevo 
@@ -155,7 +155,6 @@ def NextTurn():
     return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn= num_turn[0])
 
 
-    
 
 @app.after_request
 def log_the_status_code(response):

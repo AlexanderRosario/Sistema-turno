@@ -8,3 +8,36 @@ def ConectionDB():
         print(e)
 
     return conn
+
+
+def InsertAndUpdate(query_insert):
+    conn = ConectionDB()
+    try:
+        cur = conn.cursor()
+        cur.execute(query_insert)
+        conn.commit() 
+        return True
+
+    except Exception as e:
+        print(e)
+        return None
+    finally:
+        if conn:
+            conn.close()
+
+
+def QuerySelectOne(query_Select):
+    conn = ConectionDB()
+    try:
+        cur = conn.cursor()
+        cur.execute(query_Select)
+        row = cur.fetchone()
+        return row
+
+    except Exception as e:
+        print(e)
+        return None
+    finally:
+        if conn:
+            conn.close()
+    

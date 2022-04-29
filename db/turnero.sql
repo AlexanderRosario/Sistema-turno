@@ -28,16 +28,6 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla 'atencion'
 --
 
-CREATE TABLE 'atencion' (
-  'id' int(11) NOT NULL,
-  'turno' varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
-  'idCaja' int(11) NOT NULL,
-  'idUsuario' int(11) NOT NULL,
-  'atendido' int(11) NOT NULL,
-  'fechaAtencion' datetime NOT NULL,
-  'idTurno' int(11) NOT NULL
-) 
-
 --
 -- Volcado de datos para la tabla 'atencion'
 --
@@ -90,15 +80,17 @@ CREATE TABLE "turns" (
 	PRIMARY KEY("TurnsID" AUTOINCREMENT)
 );
 
-CREATE TABLE FinishedShift (
-  FinishedShiftID INTEGER PRIMARY KEY AUTOINCREMENT,
-  UserID INTEGER NOT NULL,
-  TurnsID INTEGER NOT NULL,
-  Description	TEXT,
-  CreatedAt datetime DEFAULT (datetime('now')) NOT NULL,
-  DeletedAt datetime,
-  IsEnabled BOOLEAN NOT NULL  DEFAULT(true)
-)
+CREATE TABLE "FinishedShift" (
+	"FinishedShiftID"	INTEGER,
+	"UserID"	INTEGER NOT NULL,
+	"TurnsID"	INTEGER NOT NULL,
+	"Description"	TEXT,
+	"Status"	TEXT NOT NULL DEFAULT 'attending',
+	"CreatedAt"	datetime NOT NULL DEFAULT (datetime('now')),
+	"DeletedAt"	datetime,
+	"IsEnabled"	BOOLEAN NOT NULL DEFAULT (true),
+	PRIMARY KEY("FinishedShiftID" AUTOINCREMENT)
+);
 
 
 -- Available
@@ -160,12 +152,7 @@ CREATE TABLE 'noticias' (
 -- Estructura de tabla para la tabla 'turnos'
 --
 
-CREATE TABLE 'turnos' (
-  'id' int(11) NOT NULL,
-  'turno' varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
-  'atendido' int(11) NOT NULL,
-  'fechaRegistro' datetime NOT NULL
-) 
+
 
 --
 -- Volcado de datos para la tabla 'turnos'
