@@ -1,5 +1,3 @@
-
-from werkzeug.security import check_password_hash
 from  .control import ConectionDB
 
 def select_cashier():
@@ -22,4 +20,5 @@ def select_cashier():
     except Exception as e:
         print(e)
     
+
 

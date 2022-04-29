@@ -46,15 +46,16 @@ CREATE TABLE 'atencion' (
 -- Estructura de tabla para la tabla 'cajas'
 --
 
-CREATE TABLE Users(
-  UserID INTEGER NOT NULL ,
-  UserName varchar(50) NOT NULL UNIQUE,
-  Password varchar(255) NOT NULL,
-  CreatedAt datetime DEFAULT (datetime('now')) NOT NULL,
-  DeletedAt datetime,
-  IsEnabled BOOLEAN NOT NULL DEFAULT (true),
-  PRIMARY KEY("UserID" AUTOINCREMENT)
-) 
+CREATE TABLE Users (
+	"UserID"	INTEGER NOT NULL,
+	"UserName"	varchar(50) NOT NULL UNIQUE,
+	"Password"	varchar(255) NOT NULL,
+	"UserRol"	varchar(25) DEFAULT 'cajero',
+	"CreatedAt"	datetime NOT NULL DEFAULT (datetime('now')),
+	"DeletedAt"	datetime,
+	"IsEnabled"	BOOLEAN NOT NULL DEFAULT (true),
+	PRIMARY KEY("UserID" AUTOINCREMENT)
+);
 
 CREATE TABLE Cashiers (
   CashierID INTEGER ,
@@ -77,15 +78,28 @@ CREATE TABLE CashierUsers (
 ) 
 
 
-CREATE TABLE turns (
-  TurnsID INTEGER PRIMARY KEY AUTOINCREMENT,
-  Identification varchar(15) NOT NULL,
-  CreatedAt datetime DEFAULT (datetime('now')) NOT NULL ,
-  UpdateAt datetime ,
+CREATE TABLE "turns" (
+	"TurnsID"	INTEGER,
+	"Identification"	varchar(15) NOT NULL,
+	"Description"	TEXT,
+	"CreatedAt"	datetime NOT NULL DEFAULT (datetime('now')),
+	"UpdateAt"	datetime,
+	"DeletedAt"	datetime,
+	"status"	varchar(15) NOT NULL DEFAULT available,
+	"IsEnabled"	BOOLEAN NOT NULL DEFAULT (true),
+	PRIMARY KEY("TurnsID" AUTOINCREMENT)
+);
+
+CREATE TABLE FinishedShift (
+  FinishedShiftID INTEGER PRIMARY KEY AUTOINCREMENT,
+  UserID INTEGER NOT NULL,
+  TurnsID INTEGER NOT NULL,
+  Description	TEXT,
+  CreatedAt datetime DEFAULT (datetime('now')) NOT NULL,
   DeletedAt datetime,
-  status  varchar(15) DEFAULT "available" NOT NULL,
   IsEnabled BOOLEAN NOT NULL  DEFAULT(true)
-) 
+)
+
 
 -- Available
 -- Attending
@@ -93,6 +107,24 @@ CREATE TABLE turns (
 -- --------------------------------------------------------
 
 --
+
+CREATE TABLE 'atencion' (
+  'id' int(11) NOT NULL,
+  'turno' varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
+  'idCaja' int(11) NOT NULL,
+  'idUsuario' int(11) NOT NULL,
+  'atendido' int(11) NOT NULL,
+  'fechaAtencion' datetime NOT NULL,
+  'idTurno' int(11) NOT NULL
+) 
+
+CREATE TABLE 'turnos' (
+  'id' int(11) NOT NULL,
+  'turno' varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
+  'atendido' int(11) NOT NULL,
+  'fechaRegistro' datetime NOT NULL
+) 
+
 -- Estructura de tabla para la tabla 'info_empresa'
 --
 

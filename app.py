@@ -7,8 +7,9 @@ from helpers.login import ValidateUser
 from models.insert_user import InsertUser , insert_cashier_user
 from models.insert_cashier import InsertCashier
 from models.insert_turn import insertTurn
+from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
-from helpers.select_turn import SelectTurn
+from helpers.select_turn import SelectNewTurn,SelectShift
 app = Flask(__name__)
 CORS(app)
 
@@ -38,9 +39,22 @@ def Login():
 def PostLogin():
     user = ValidateUser(request)
     if type(user) != dict:
-        return user
 
-    return redirect(url_for('menu')) 
+        return user
+    print(user)
+    if user["rol"] =="admin":
+        return redirect(url_for('menu')) 
+    if user["rol"] == "cajero":
+        # dict_user = {"id":row[0],
+        #             "username":row[1],
+        #             "rol":row[3],
+        #             "cashiername": caja[0]}
+        print(user["username"])
+        
+        return redirect(url_for(endpoint='CashierService',cashiername=user["cashiername"],username=user["username"],userid=user['id']))
+
+
+    return redirect(url_for('Login')) 
 
 
 
@@ -83,46 +97,74 @@ def cashier_post():
 
 
 
-@app.route('/getturn',methods=['GET'])
+@app.route('/turn',methods=['GET'])
 def turn():
-    return render_template('layouts/select_turn.html')
+    return render_template('layouts/turn.html')
 
 
 
-@app.route('/getturn',methods=['POST'])
+@app.route('/turn',methods=['POST'])
 def turn_post():
     if not request.form['ident']:
-        return render_template('layouts/select_turn.html',error = "Debe llenar la casilla de la Identificacion.")
+        return render_template('layouts/turn.html',error = "Debe llenar la casilla de la Identificacion.")
     
     if insertTurn(request.form['ident'],request.form['description']) != True:
 
-        return render_template('layouts/select_turn.html',error = "No se pudo generar el turno.")
-    return redirect(url_for('selectturn',ident =request.form['ident']))
+        return render_template('layouts/turn.html',error = "No se pudo generar el turno.")
+    return redirect(url_for('selectnewturn',ident =request.form['ident']))
         # render_template('layouts/viewturn.html',error = "Debe llenar la casilla de la Identificacion.")
 
 
 
 
-@app.route('/selectturn',methods=['GET'])
-def selectturn():
+@app.route('/viewturn',methods=['GET'])
+def selectnewturn():
     
-    num_turn = SelectTurn(request.args.get('ident'))
+    num_turn = SelectNewTurn(request.args.get('ident'))
     if not num_turn  :
-        return render_template('layouts/viewturn.html',error = "No hay turnos disponibles para este id")
+        return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
         
     return render_template('layouts/viewturn.html', num_turn = num_turn[0])
 
+
+@app.route('/service',methods=['GET'])
+def CashierService():
+    if not request.args.get("cashiername"):
+        print("error no ta encontrando nada papa ")
+        return redirect(url_for('Login'))
+    #     cashiername
+
+    print(request.args.get("cashiername"))
+    return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=0)
+    # redirect(url_for('service'),user)
+
+
+@app.route('/service',methods=['POST'])
+def NextTurn():
+   
+    if InsertAttendedTurn(request.form['userid'],request.form['num_turn'],request.form['description']) != True:
+        # no se pudo finalizar la transacion
+
+        return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir seccion" )
+    num_turn = SelectShift()
+
+    if not num_turn:
+        # no puedo encontrar un tur no nuevo 
+        return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="No hay turnos disponible espera uno" )
+
+    return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn= num_turn[0])
 
 
     
 
 @app.after_request
 def log_the_status_code(response):
-    # status_as_string = response.status
-    # status_as_integer = response.status_code
-    # logging.warning("status as string %s" % status_as_string)
-    # logging.warning("status as integer %s" % status_as_integer)
+    # print(response.status)
+    # print( response.status_code)
+    # # logging.warning("status as string %s" % status_as_string)
+    # # logging.warning("status as integer %s" % status_as_integer)
     # print(response.status_code)
+    # cors_after_request(app.make_response(f(*args, **kwargs)))
     return response
 
 

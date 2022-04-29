@@ -13,3 +13,5 @@ dist/
 build/
 *.egg-info/
 config.py
+
+System_turn.sqbpro

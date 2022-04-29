@@ -30,6 +30,13 @@ a:hover{
   border: #E8D426;
 }
 .btn:hover {
-  background: #16df9f;
+  background: #04AA6D;
   border: #E8D426;
+}
+
+.cashier{ background-color: #08a36a;
+  height: 60px;
+  /* width: 60px; */
+  display: flex;
+  justify-content: center;
 }
