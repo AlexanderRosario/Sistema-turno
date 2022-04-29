@@ -32,6 +32,7 @@ def QuerySelectOne(query_Select):
         cur = conn.cursor()
         cur.execute(query_Select)
         row = cur.fetchone()
+        
         return row
 
     except Exception as e:
@@ -41,3 +42,24 @@ def QuerySelectOne(query_Select):
         if conn:
             conn.close()
     
+
+def SelectList(query_select):
+    conn = ConectionDB()
+    
+    try:
+        
+        cur = conn.cursor()
+        cur.execute(query_select)
+        row = cur.fetchall()
+        print(row)
+        if not row:
+            return None
+  
+        return row
+
+    except Exception as e:
+        return None
+
+    finally:
+        if conn:
+            conn.close()

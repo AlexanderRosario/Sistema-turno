@@ -9,14 +9,16 @@ from models.insert_cashier import InsertCashier
 from models.insert_turn import insertTurn
 from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
-from helpers.select_turn import SelectNewTurn,SelectShift
+from helpers.select_turn import SelectNewTurn,SelectShift,SelectListTurn
 app = Flask(__name__)
 CORS(app)
 
 
 
 def initialize_app(config):
+
     app.config.from_object(config)
+
     return app
 
 app = initialize_app(config['development'])
@@ -41,19 +43,17 @@ def PostLogin():
     if type(user) != dict:
 
         return user
-    print(user)
+
     if user["rol"] =="admin":
         return redirect(url_for('menu')) 
+
     if user["rol"] == "cajero":
         # dict_user = {"id":row[0],
         #             "username":row[1],
         #             "rol":row[3],
         #             "cashiername": caja[0]}
-        print(user["username"])
         
         return redirect(url_for(endpoint='CashierService',cashiername=user["cashiername"],username=user["username"],userid=user['id']))
-
-
     return redirect(url_for('Login')) 
 
 
@@ -61,14 +61,15 @@ def PostLogin():
 @app.route('/register',methods=['GET'])
 def singup():
     if  request.args.get('messaje') or  request.args.get('user'):
-        return render_template('layouts/register.html',message=request.args.get('messaje'),user=request.args.get('user')),403
 
+        return render_template('layouts/register.html',message=request.args.get('messaje'),user=request.args.get('user')),403
     return render_template('layouts/register.html',data=select_cashier())
 
 
 
 @app.route('/register',methods=['POST'])
 def PostRegister(): 
+
     if request.form['password'] != request.form['password-repeat']:
         return render_template('layouts/register.html',message='La Contraseña no coinciden',data=select_cashier())
 
@@ -77,7 +78,6 @@ def PostRegister():
         
     if not insert_cashier_user(request.form['comp_select'],request.form['username']):
         return render_template('layouts/register.html',user='No pudo ser asignado a una caja',data=select_cashier())
-
     return render_template('layouts/register.html',success="Se ha creado el usuario",data=select_cashier())
 
 
@@ -90,9 +90,9 @@ def cashier():
 
 @app.route('/cashier',methods=['POST'])
 def cashier_post():
+
     if InsertCashier(request.form['namecashier'])!= True:
         return render_template('layouts/cashier.html',error ="Se ha producido un error")
-
     return render_template('layouts/cashier.html',messaje = "Se ha creado la caja")
 
 
@@ -105,6 +105,7 @@ def turn():
 
 @app.route('/turn',methods=['POST'])
 def turn_post():
+
     if not request.form['ident']:
         return render_template('layouts/turn.html',error = "Debe llenar la casilla de la Identificacion.")
     
@@ -116,27 +117,25 @@ def turn_post():
 
 
 
-
 @app.route('/viewturn',methods=['GET'])
 def selectnewturn():
     
     num_turn = SelectNewTurn(request.args.get('ident'))
+
     if not num_turn  :
         return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
-        
     return render_template('layouts/viewturn.html', num_turn = num_turn[0])
+
 
 
 @app.route('/service',methods=['GET'])
 def CashierService():
-    if not request.args.get("cashiername"):
-        print("error no ta encontrando nada papa ")
-        return redirect(url_for('Login'))
-    #     cashiername
 
-    print(request.args.get("cashiername"))
+    if not request.args.get("cashiername"):
+        return redirect(url_for('Login'))
     return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=0)
     # redirect(url_for('service'),user)
+
 
 
 @app.route('/service',methods=['POST'])
@@ -144,15 +143,23 @@ def NextTurn():
    
     if InsertAttendedTurn(request.form['userid'],request.form['num_turn'],request.form['description']) != True:
         # no se pudo finalizar la transacion
-
         return render_template('layouts/cashier_service.html',cashiername = request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir seccion" )
+   
     num_turn = SelectShift(request.form['userid'])
 
     if not num_turn:
         # no puedo encontrar un tur no nuevo 
         return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="No hay turnos disponible espera uno" )
-
     return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn= num_turn[0])
+
+
+
+@app.route('/listurn',methods=['GET'])
+def ViewListTurn():
+    return render_template('layouts/list_turn.html',data=SelectListTurn())
+
+
+
 
 
 
@@ -168,7 +175,7 @@ def log_the_status_code(response):
 
 
 
-
 if __name__=='__main__':
     # app.debug(False)
-    app.run(port=8000,debug=True)
+    app.run(port=8000)
+
