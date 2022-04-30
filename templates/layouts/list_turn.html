@@ -7,7 +7,7 @@
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'>
   <link rel="stylesheet"  href= "{{ url_for('static',filename='styles/style.css') }}">
-  <!-- <meta http-equiv="refresh" content="10"> -->
+  <meta http-equiv="refresh" content="10">
 
 <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet" href="./style.css"> -->
 
@@ -24,29 +24,18 @@
                     <!-- <form id="submitForm" action="/service" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4"> -->
                         <TABLE BORDER>
                             <TR>
-                                <TH>CAJA</TH> <TH>TURNO</TH>
+                                <TH style="padding-left:5px;padding-bottom:3px; font-size: 60px" >CAJA</TH> <TH  style="padding-left:5px;padding-bottom:3px; font-size: 60px">TURNO</TH>
                             </TR>
                             {%if data %}
                             {% for row in data %}
                             <TR>
-                                <TD>{{row.0}}</TD> <TD>{{row.1}}</TD> 
+                                <TD  style="padding-left:5px;padding-bottom:3px; font-size: 60px">{{row.0}}</TD> <TD style="padding-left:5px;padding-bottom:3px; font-size: 60px; text-align: center;">{{row.1}}</TD> 
                             </TR>
                             {%endfor%}
                             {% endif %}
 
                         </TABLE>
-
-
-                        <!-- <div class="form-group pt-1">
-                            <button class="btn btn-primary btn-block" type="submit">Siguiente</button>
-                        </div> -->
-                        
-                    <!-- </form> -->
-                    
                 </div>
-                <!-- <div class="clearfix">
-                    <button type="button" onClick="location.href='/service'" class="cancelbtn" >Cancelar </button> 
-                  </div> -->
             </div>
         </div>
     </div>
