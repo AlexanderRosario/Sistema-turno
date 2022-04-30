@@ -54,7 +54,7 @@ def SelectList(query_select):
         print(row)
         if not row:
             return None
-  
+        
         return row
 
     except Exception as e:

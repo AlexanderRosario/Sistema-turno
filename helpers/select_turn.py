@@ -32,6 +32,10 @@ def SelectShift(userid):
     return row
 
 def SelectListTurn():
-    sql = '''SELECT UserID,turnsID FROM FinishedShift WHERE  IsEnabled = 1 AND status = 'attending'  '''
-    
+    sql = '''SELECT Cashiers.Name,FinishedShift.turnsID FROM FinishedShift 
+	            INNER JOIN Users ON Users.UserID = FinishedShift .UserID
+	            INNER JOIN CashierUsers on CashierUsers.UserID = users.UserID
+	            INNER JOIN Cashiers on Cashiers.CashierID = CashierUsers.CashierID 
+                    WHERE FinishedShift.IsEnabled = 1 AND status = 'attending'  '''
+
     return SelectList(sql)
