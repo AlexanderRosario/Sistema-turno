@@ -67,11 +67,40 @@ def Updatecashier(id,name):
                                                 WHERE CashierID = '{}' '''.format(name,id
 
                                                 )
-    print(sql_update)
+  
     return InsertAndUpdate(sql_update)
 
 
 def Deletecashier(id):
     sql_update = '''Delete FROM Cashiers WHERE CashierID = {} '''.format(id)
-    print(sql_update)
+
     return InsertAndUpdate(sql_update)
+
+def SelectUsers():
+    
+    sql = ''' SELECT UserID,UserName,UserRol from Users 
+                                                          Where IsEnabled = 1 and   UserRol = 'cajero'; '''
+    
+    return SelectList(sql)
+
+
+def UpdateUser(id_user,username,id_caja):
+    
+    sql_update = '''UPDATE users SET  UserName='{1}'
+                                                WHERE UserID = '{0}' AND IsEnabled = 1'''.format(id_user,username.lower())
+    
+ 
+    valid = InsertAndUpdate(sql_update)
+    if valid !=True :
+        return valid
+
+    sql_update = '''UPDATE CashierUsers SET  CashierID = {0}  WHERE UserID = '{1}' AND IsEnabled = 1 '''.format(id_caja,id_user)
+   
+    return  InsertAndUpdate(sql_update)
+   
+
+def DeleteUserSql(id_user):
+    sql_update = '''UPDATE users SET  IsEnabled=0
+                                                WHERE UserID = '{0}' AND IsEnabled = 1'''.format(id_user)
+    print(sql_update)
+    return  InsertAndUpdate(sql_update)

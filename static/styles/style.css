@@ -40,3 +40,21 @@ a:hover{
   display: flex;
   justify-content: center;
 }
+
+.div_turn{
+  
+  background: #08a36a;
+  height: auto;
+  /*IMPORTANTE*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+}
+
+.table {
+  background: rgb(255, 255, 255);
+  width: auto;
+  
+}

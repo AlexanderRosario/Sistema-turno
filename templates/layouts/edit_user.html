@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+  <link rel="stylesheet"  href= "{{ url_for('static',filename='styles/style.css') }}">
+    
+    <meta charset="UTF-8">
+    <title>solicitar turno</title>
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+  <div class="pt-5">
+     <h1 class="text-center">Editar Usuario</h1>
+  <div class="container">
+                  <div class="row">
+                      <div class="col-md-5 mx-auto">
+                          <div class="card card-body">
+                            <div  class="form-group required">
+                              {%if update%}
+                                <h3 style="color:#2ef663"; >{{update}}</h3>
+                              {%endif%} 
+                              {%if error%}
+                                <h4 style="color:#d92a21"; >{{error}}</h4>
+                              {%endif%}
+                                <!-- <center><h3 style="background-color: rgb(10, 178, 212);"  for="business">Editar Usuarios</h3></center> -->
+                                 
+                              <form id="submitForm" action="/editUser" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
+                                
+                                <label > Usuario a editar:</label>  
+                                <select name="id_user" class="selectpicker form-control">
+                                  <div>
+                                  {% for user in users %}
+                                    <option value="{{ user.0 }}">{{ user.1}}</option>
+                                  {% endfor %}
+                                </div>
+                                </select>
+                                <br>
+
+                                <label > Nombre:</label>   
+                                <input type="text" class="form-control text-lowercase" placeholder="" id="description" required="" name="name" value="" >   
+                                
+                                <br>
+                                <label > Caja:</label>  
+                                <select name="id_caja" class="selectpicker form-control">
+                                  <div>
+                                  {% for caja in cajas %}
+                                    <option value="{{ caja.0 }}">{{ caja.1}}</option>
+                                  {% endfor %}
+                                </div>
+                                </select>
+                                <br>
+                                <br>
+                                  <div class="form-group pt-1">
+                                      <button class="btn btn-primary btn-block" type="submit" >Guardar</button>
+                                  </div> 
+                                  <div class="clearfix" style="display: flex; justify-content: center; ">
+                                    <button type="button" onClick="location.href='/menu'" class="cancelbtn" >Cancelar </button> 
+                                </div>
+                              </form>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  </div>
+  <!-- partial -->
+    
+  </body>
+</html>

@@ -8,7 +8,8 @@ from models.insert_cashier import InsertCashier
 from models.insert_turn import insertTurn
 from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
-from helpers.select_turn import SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,UpdateInfoBusiness,Updatecashier,Deletecashier
+from helpers.select_turn import (SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,
+UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql)
 app = Flask(__name__)
 CORS(app)
 
@@ -72,7 +73,7 @@ def PostRegister():
     if request.form['password'] != request.form['password-repeat']:
         return render_template('layouts/register.html',message='La Contraseña no coinciden',data=select_cashier())
 
-    if not InsertUser(request.form['username'],request.form['password']):
+    if not InsertUser(request.form['username'].lower(),request.form['password']):
         return render_template('layouts/register.html',user='No pudo ser creado',data=select_cashier())
         
     if not insert_cashier_user(request.form['comp_select'],request.form['username']):
@@ -220,6 +221,37 @@ def deletCashier():
 
         return render_template ('layouts/delete_cashier.html',update="No se puedo Eliminar",data=select_cashier())
 
+@app.route('/editUser',methods=['GET','POST'])
+def EditUser():
+    if request.method == 'GET':
+        return render_template('layouts/edit_user.html',cajas = select_cashier(),users=SelectUsers())
+
+    elif request.method == 'POST':
+        if not request.form['name']:
+            return render_template('layouts/edit_user.html',error="No deje ningun campo vacio",cajas=select_cashier()) 
+        
+        if UpdateUser(request.form['id_user'],request.form['name'],request.form['id_caja']):
+
+
+            return render_template('layouts/edit_user.html',update="Se actualizo el usuario",cajas=select_cashier(),users=SelectUsers())
+
+        return  render_template('layouts/edit_user.html',error="No se puedo modificar",cajas=select_cashier()) 
+
+
+@app.route('/deleteUser',methods=['GET','POST'])
+def DeleteUser():
+    if request.method == 'GET':
+        return render_template('layouts/delete_user.html',users=SelectUsers())
+
+    elif request.method == 'POST':
+        if not request.form['id_user']:
+            return render_template('layouts/delete_user.html',error="No deje ningun campo vacio",cajas=select_cashier()) 
+        
+        if DeleteUserSql(request.form['id_user']):
+
+            return render_template('layouts/delete_user.html',deleted="Se elimino el usuario",cajas=select_cashier(),users=SelectUsers())
+
+        return  render_template('layouts/delete_user.html',error="No se puedo Eliminar",cajas=select_cashier()) 
 
 
 

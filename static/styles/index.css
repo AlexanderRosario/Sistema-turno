@@ -21,6 +21,7 @@ contenedor-menu{
 	background:#1cde15;
 	margin-bottom:2%;
 	text-align:center;
+	border:solid 1px white
 }
 .menu-li a{
 	display:block;

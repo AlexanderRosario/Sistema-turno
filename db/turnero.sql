@@ -54,7 +54,7 @@ CREATE TABLE Cashiers (
   DeletedAt datetime,
   IsEnabled BOOLEAN NOT NULL DEFAULT(true),
   PRIMARY KEY("CashierID" AUTOINCREMENT)
-) 
+);
 
 CREATE TABLE CashierUsers (
   CashierUsersID  INTEGER PRIMARY KEY AUTOINCREMENT,

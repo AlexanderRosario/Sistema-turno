@@ -9,8 +9,8 @@ def ValidateUser( request):
     :param request:
     :return: project id
     """
-    sql = '''SELECT UserID, UserName,Password,userRol FROM  Users WHERE UserName = '{}' '''.format(request.form['username'])
-
+    sql = '''SELECT UserID, UserName,Password,userRol FROM  Users WHERE UserName = '{}' AND IsEnabled = 1 '''.format(request.form['username'])
+    # print(sql)
     conn = ConectionDB()
     
     try:
@@ -21,7 +21,7 @@ def ValidateUser( request):
         # print(row)
         if not row:
             return "Ususario no registrado"
-            
+        # print(row[1])   
 
         if check_password_hash(row[2],request.form['password']) != True:
             return "El Usuario o Contraseña no son correctas"
