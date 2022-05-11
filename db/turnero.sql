@@ -98,36 +98,19 @@ CREATE TABLE "FinishedShift" (
 -- Finished
 -- --------------------------------------------------------
 
---
+SELECT * FROM InfoBusiness
 
-CREATE TABLE 'atencion' (
-  'id' int(11) NOT NULL,
-  'turno' varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
-  'idCaja' int(11) NOT NULL,
-  'idUsuario' int(11) NOT NULL,
-  'atendido' int(11) NOT NULL,
-  'fechaAtencion' datetime NOT NULL,
-  'idTurno' int(11) NOT NULL
-) 
+UPDATE InfoBusiness SET Logo = 'images\cash.png'
 
-CREATE TABLE 'turnos' (
-  'id' int(11) NOT NULL,
-  'turno' varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
-  'atendido' int(11) NOT NULL,
-  'fechaRegistro' datetime NOT NULL
-) 
-
--- Estructura de tabla para la tabla 'info_empresa'
---
-
-CREATE TABLE 'info_empresa' (
-  'id' int(11) NOT NULL,
-  'logo' varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  'nombre' varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  'direccion' varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  'telefono' varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  'correo' varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  'fecha_actualizacion' datetime NOT NULL
+CREATE TABLE "InfoBusiness" (
+  "ID" INTEGER,
+  "Logo" varchar(100)   NOT NULL,
+  "Name" varchar(100)   NOT NULL,
+  "address" varchar(100)   NOT NULL,
+  "Phone" varchar(100)   NOT NULL,
+  "email" varchar(100)   NOT NULL,
+  "UpdateAt"	datetime NOT NULL DEFAULT (datetime('now')),
+  	PRIMARY KEY("id" AUTOINCREMENT)
 ) 
 
 --

@@ -1,3 +1,4 @@
+from telnetlib import PRAGMA_HEARTBEAT
 from  .control import InsertAndUpdate,QuerySelectOne,SelectList
 
 def SelectNewTurn(ident):
@@ -39,3 +40,38 @@ def SelectListTurn():
                     WHERE FinishedShift.IsEnabled = 1 AND status = 'attending'  '''
 
     return SelectList(sql)
+
+
+def SelectInfoBusinness():
+    
+    sql = ''' SELECT ID,Logo,Name,address,Phone,email,UpdateAt from InfoBusiness; '''
+    
+    return QuerySelectOne(sql)
+
+
+def UpdateInfoBusiness(id,name,address,phone,email):
+    sql_update = '''UPDATE InfoBusiness SET   Name='{}',
+                                                address ='{}',
+                                                Phone='{}',
+                                                email='{}',
+                                                UpdateAt= datetime('now') WHERE ID = '{}' '''.format(name,address,phone,email,id
+
+                                                )
+
+
+    return InsertAndUpdate(sql_update)
+
+
+def Updatecashier(id,name):
+    sql_update = '''UPDATE Cashiers SET   Name='{}'
+                                                WHERE CashierID = '{}' '''.format(name,id
+
+                                                )
+    print(sql_update)
+    return InsertAndUpdate(sql_update)
+
+
+def Deletecashier(id):
+    sql_update = '''Delete FROM Cashiers WHERE CashierID = {} '''.format(id)
+    print(sql_update)
+    return InsertAndUpdate(sql_update)

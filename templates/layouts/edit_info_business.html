@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet"  href= "{{ url_for('static',filename='styles/style.css') }}">
+    
+    <meta charset="UTF-8">
+    <title>solicitar turno</title>
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+  <div class="pt-5">
+    <!-- <h1 class="text-center">Gestion de turno</h1>
+    <h2 class="text-center">Ingrese su Identificacion y luego click en Aceptar</h2>
+     -->
+  <div class="container">
+                  <div class="row">
+                      <div class="col-md-5 mx-auto">
+                          <div class="card card-body">
+                            <div  class="form-group required">
+                                <center><h3 style="background-color: rgb(10, 178, 212);"  for="business">Informacion de la empresa</h3></center>
+                              <p>-registro de empresa-</p>
+                              <form id="submitForm" action="/editinfbusiness" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
+                                <input hidden name="id" value="{{data.0}}">
+                                <label > Nombre:</label>   
+                                <input type="text" class="form-control text-lowercase" placeholder="{{data.2}}" id="description" required="" name="name" value="{{data.2}}" >   
+                                <label> Direccion: </label> 
+                                <input type="text" class="form-control text-lowercase" placeholder="{{data.3}}" id="description" required="" name="addres" value="{{data.3}}" >   
+                                
+                                <label> Telefono: </label> 
+                                <input type="tel" class="form-control text-lowercase" placeholder="{{data.4}}" id="description" required="" name="phone" value="{{data.4}}" >   
+                                
+                                <label> Correo: </label>
+                                <input type="text" class="form-control text-lowercase" placeholder="{{data.5}}" id="description" required="" name="email" value="{{data.5}}" >   
+                                  
+                                <br>
+                                  <div class="form-group pt-1">
+                                      <button class="btn btn-primary btn-block" type="submit" >Guardar</button>
+                                  </div> 
+                              </form>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  </div>
+  <!-- partial -->
+    
+  </body>
+</html>

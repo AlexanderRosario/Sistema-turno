@@ -1,5 +1,4 @@
-
-
+from cmath import inf
 from flask import Flask, render_template, request,redirect, url_for
 from flask_cors import CORS
 from config import config
@@ -9,7 +8,7 @@ from models.insert_cashier import InsertCashier
 from models.insert_turn import insertTurn
 from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
-from helpers.select_turn import SelectNewTurn,SelectShift,SelectListTurn
+from helpers.select_turn import SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,UpdateInfoBusiness,Updatecashier,Deletecashier
 app = Flask(__name__)
 CORS(app)
 
@@ -159,6 +158,67 @@ def ViewListTurn():
     return render_template('layouts/list_turn.html',data=SelectListTurn())
 
 
+
+@app.route('/infbusiness',methods=['GET'])
+def InfoBusiness():
+
+    Info_Business = SelectInfoBusinness()
+
+    if not Info_Business:
+        return render_template('layouts/info_business.html',error="No hay Informacion registrada" )
+
+    return render_template('layouts/info_business.html',data=Info_Business)
+
+
+
+@app.route('/editinfbusiness',methods=['GET','POST'])
+def EditInfoBusiness():
+
+    Info_Business = SelectInfoBusinness()
+
+    if request.method == 'GET':
+        print('HOLA1')
+        if not Info_Business:
+             return render_template('layouts/cashier_service.html',error="No hay turnos disponible espera uno" )
+             
+        return render_template('layouts/edit_info_business.html',data=Info_Business)
+        
+    elif request.method == 'POST':
+        # print(request.form['name'])
+
+        if UpdateInfoBusiness(request.form['id'],request.form['name'],request.form['addres'],request.form['phone'],request.form['email']):
+        
+            return redirect(url_for('InfoBusiness'))
+        return redirect(url_for('InfoBusiness')) 
+
+
+
+@app.route('/editcashier',methods=['GET','POST'])
+def EditCashier():
+    if request.method == 'GET':
+        return render_template('layouts/edit_cashier.html',data=select_cashier())
+
+    elif request.method == 'POST':
+        
+        if Updatecashier(request.form['id_caja'],request.form['name']):
+
+
+            return render_template('layouts/edit_cashier.html',update="Actualizado la caja",data=select_cashier())
+
+        return redirect(url_for('EditCashier'),update="No se puedo modificar",data=select_cashier()) 
+
+
+
+@app.route('/deletecashier',methods=['GET','POST'])
+def deletCashier():
+    if request.method == 'GET':
+        return render_template('layouts/delete_cashier.html',data=select_cashier())
+
+    elif request.method == 'POST':
+        if Deletecashier(request.form['id_caja']):
+            return render_template('layouts/delete_cashier.html',deleted="Se ha Eliminado la caja",data=select_cashier())
+
+        return render_template ('layouts/delete_cashier.html',update="No se puedo Eliminar",data=select_cashier())
 
 
 
