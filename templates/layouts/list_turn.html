@@ -7,29 +7,26 @@
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'>
   <link rel="stylesheet"  href= "{{ url_for('static',filename='styles/style.css') }}">
-  <!-- <meta http-equiv="refresh" content="10"> -->
+  <meta http-equiv="refresh" content="10">
 
 <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet" href="./style.css"> -->
 
 </head>
 <body>
-    <div class="div_turn" >  
-            <div  class="table" >
-                    
-                       <TABLE BORDER >
+    <div style="text-align:center;   display: flex; justify-content: center; height: auto; width: auto;" >
+                       <TABLE BORDER style="background-color: #fff; size: 100%;" >
                             <TR>
-                                <TH style="padding-left:5px;padding-bottom:3px; font-size: 60px" >CAJA</TH> <TH  style="padding-left:5px;padding-bottom:3px; font-size: 60px">TURNO</TH>
+                                <TH style="padding-left:5px;padding-bottom:3px; font-size: 125px" >CAJA</TH> <TH  style="padding-left:5px;padding-bottom:3px; font-size:  125px">TURNO</TH>
                             </TR>
                             {%if data %}
                             {% for row in data %}
                             <TR>
-                                <TD  style="padding-left:5px;padding-bottom:3px; font-size: 60px">{{row.0}}</TD> <TD style="padding-left:5px;padding-bottom:3px; font-size: 60px; text-align: center;">{{row.1}}</TD> 
+                                <TD  style="padding-left:5px;padding-bottom:3px; font-size: 110px">{{row.0}}</TD> <TD style="padding-left:5px;padding-bottom:3px; font-size: 110px; text-align: center;">{{row.1}}</TD> 
                             </TR>
                             {%endfor%}
                             {% endif %}
 
                         </TABLE>
-                </div>
-    </div> 
+    </div>
 </body>
 </html>

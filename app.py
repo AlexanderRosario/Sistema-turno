@@ -10,6 +10,7 @@ from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
 from helpers.select_turn import (SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,
 UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql)
+from helpers.heatmap import df_frame
 app = Flask(__name__)
 CORS(app)
 
@@ -253,7 +254,10 @@ def DeleteUser():
 
         return  render_template('layouts/delete_user.html',error="No se puedo Eliminar",cajas=select_cashier()) 
 
-
+@app.route('/heatmap',methods=['GET'])
+def HeatMap():
+    df_frame()
+    return render_template('layouts/heatmap.html') 
 
 @app.after_request
 def log_the_status_code(response):

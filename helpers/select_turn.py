@@ -1,4 +1,4 @@
-from telnetlib import PRAGMA_HEARTBEAT
+
 from  .control import InsertAndUpdate,QuerySelectOne,SelectList
 
 def SelectNewTurn(ident):
@@ -37,7 +37,7 @@ def SelectListTurn():
 	            INNER JOIN Users ON Users.UserID = FinishedShift .UserID
 	            INNER JOIN CashierUsers on CashierUsers.UserID = users.UserID
 	            INNER JOIN Cashiers on Cashiers.CashierID = CashierUsers.CashierID 
-                    WHERE FinishedShift.IsEnabled = 1 AND status = 'attending'  '''
+                    WHERE FinishedShift.IsEnabled = 1 AND status = 'attending' ORDER BY FinishedShift.turnsID desc '''
 
     return SelectList(sql)
 

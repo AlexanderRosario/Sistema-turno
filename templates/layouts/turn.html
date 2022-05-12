@@ -12,7 +12,7 @@
   <!-- partial:index.partial.html -->
   <div class="pt-5">
     <h1 class="text-center">Gestion de turno</h1>
-    <h2 class="text-center">Ingrese su Identificacion y luego click en Aceptar</h2>
+    <h2 class="text-center" style="color: #fff ;">Ingrese su Identificacion y luego click en Aceptar</h2>
     
   <div class="container">
                   <div class="row">
@@ -29,9 +29,25 @@
                                   </div>   
                                   <div class="form-group required">
                                     <center><lSabel for="description">Descripcion por la que esta aqui</lSabel></center>
+
+                                    <div>
+                                        <select name="description" class="selectpicker form-control">
+                                          <div>
+                                          
+                                            <option value="Deposito">Deposito</option>
+                                            <option value="Retiro">Retiro</option>
+                                            <option value="Remesas">Remesas</option>
+                                            <option value="Servicio al Cliente">Servicio al Cliente</option>
+                                            <option value="Negocios">Negocios</option>
+                                            <option value="Pagos de Servicios">Pagos de Servicios</option>
+                                         
+                                        </div>
+                                        </select>
+
+                                      <!-- </div>
                                     
                                     <input type="text" class="form-control text-lowercase" placeholder="Opcional" id="description" required="" name="description" value="" >
-                                    </div> 
+                                    </div>  -->
                                   <div class="form-group mt-4 mb-4">
                                       <div class="custom-control custom-checkbox">
                                           <input type="checkbox" class="custom-control-input" id="remember-me" name="remember-me" data-parsley-multiple="remember-me">

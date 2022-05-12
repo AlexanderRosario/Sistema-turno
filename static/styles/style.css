@@ -45,6 +45,7 @@ a:hover{
   
   background: #08a36a;
   height: auto;
+  width: auto;
   /*IMPORTANTE*/
   display: flex;
   justify-content: center;

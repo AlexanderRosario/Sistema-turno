@@ -130,7 +130,13 @@ CREATE TABLE 'noticias' (
 ) 
 
 -- --------------------------------------------------------
-
+SELECT Users.UserName,Cashiers.Name,COUNT(*),FinishedShift.DeletedAt FROM FinishedShift
+INNER JOIN users on users.UserID = FinishedShift.UserID
+INNER JOIN CashierUsers on CashierUsers.UserID = Users.UserID
+INNER JOIN Cashiers on Cashiers.CashierID = CashierUsers.CashierID 
+WHERE status= 'finished' 
+	GROUP BY  FinishedShift.UserID
+ 
 --
 -- Estructura de tabla para la tabla 'turnos'
 --
