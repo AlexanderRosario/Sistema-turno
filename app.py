@@ -256,7 +256,6 @@ def DeleteUser():
 
 @app.route('/heatmap',methods=['GET'])
 def HeatMap():
-    df_frame()
     return render_template('layouts/heatmap.html') 
 
 @app.after_request
