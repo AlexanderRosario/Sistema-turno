@@ -26,7 +26,18 @@ button:hover {
   opacity: 0.8;
 }
 
+a {
+  -moz-transition: color .2s ease-in-out;
+  -webkit-transition: color .2s ease-in-out;
+  -ms-transition: color .2s ease-in-out;
+  transition: color .2s ease-in-out;
+  color: #43B3E0;
+  text-decoration: underline;
+}
 
+  a:hover {
+    color: #43bff0 !important;
+  }
 /* Extra styles for the cancel button */
 .cancelbtn {
   /* padding: 10px; */
