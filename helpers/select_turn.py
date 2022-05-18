@@ -2,42 +2,43 @@
 from  .control import InsertAndUpdate,QuerySelectOne,SelectList
 
 def SelectNewTurn(ident):
-    sql = '''SELECT turnsID FROM turns WHERE Identification = '{}' AND IsEnabled = 1 AND status = 'available'  AND CreatedAt=(SELECT MAX(CreatedAt) FROM turns) '''.format(ident)
+    sql = '''SELECT turnsID FROM turns WHERE IdentificationClient = '{}' AND IsEnabled = 1 AND status = 'available'  AND AvailableAt=(SELECT MAX(AvailableAt) FROM turns) '''.format(ident)
     
     return QuerySelectOne(sql)
     
 
 def SelectShift(userid):
     # sql = '''SELECT turnsID FROM turns WHERE IsEnabled = 1 AND status = 'available'  AND CreatedAt=(SELECT MIN(CreatedAt) FROM turns) '''
-    sql= '''WITH  available as (SELECT turnsID,CreatedAt FROM turns WHERE IsEnabled = 1 AND status = 'available')
-                SELECT * from available WHERE CreatedAt = ( select MIN(CreatedAt) from available) '''
+    sql= '''WITH  available as (SELECT turnsID,AvailableAt FROM Turns WHERE IsEnabled = 1 AND Status = 'available')
+                SELECT * from available WHERE AvailableAt = ( select MIN(AvailableAt) from available) '''
     row = QuerySelectOne(sql)
-
+    print(row)
     if not row:
         return row
 
-    query_for_view_windows = '''INSERT INTO FinishedShift(UserID,TurnsID,Status)  
-               SELECT {0}, {1},'attending'
-                    WHERE NOT EXISTS(SELECT 1 FROM FinishedShift WHERE TurnsID = {1} AND UserID= {0} )'''.format(userid,row[0])
-
+    query_for_view_windows = '''UPDATE Turns SET UserID = {0}, status = 'attending',AttendedAt = DateTime('now') 
+                    WHERE TurnsID = {1} '''.format(userid,row[0])
+    print(query_for_view_windows)
     valid = InsertAndUpdate(query_for_view_windows) 
 
     if valid !=True :
         return valid
 
     
-    sql_update = '''UPDATE turns SET  status = 'attending' , UpdateAt=DateTime('now') WHERE turnsID = '{}' '''.format(row[0])
-    valid = InsertAndUpdate(sql_update)
-    if valid != True:
-        return  valid
+    # sql_update = '''UPDATE Turns SET  status = 'attending' , AttendedAt = DateTime('now') WHERE turnsID = '{}' '''.format(row[0])
+    # valid = InsertAndUpdate(sql_update)
+    # if valid != True:
+    #     return  valid
     return row
 
+
+
 def SelectListTurn():
-    sql = '''SELECT Cashiers.Name,FinishedShift.turnsID FROM FinishedShift 
-	            INNER JOIN Users ON Users.UserID = FinishedShift .UserID
+    sql = '''SELECT Cashiers.Name,Turns.turnsID FROM Turns
+	            INNER JOIN Users ON Users.UserID = Turns.UserID
 	            INNER JOIN CashierUsers on CashierUsers.UserID = users.UserID
 	            INNER JOIN Cashiers on Cashiers.CashierID = CashierUsers.CashierID 
-                    WHERE FinishedShift.IsEnabled = 1 AND status = 'attending' ORDER BY FinishedShift.turnsID desc '''
+                    WHERE Turns.IsEnabled = 1 AND status = 'attending' ORDER BY Turns.turnsID desc '''
 
     return SelectList(sql)
 
@@ -72,7 +73,7 @@ def Updatecashier(id,name):
 
 
 def Deletecashier(id):
-    sql_update = '''Delete FROM Cashiers WHERE CashierID = {} '''.format(id)
+    sql_update = '''update Cashiers set Isenabled = 0 WHERE CashierID = {} '''.format(id)
 
     return InsertAndUpdate(sql_update)
 

@@ -10,7 +10,6 @@ def select_cashier():
         cur = conn.cursor()
         cur.execute(sql)
         row = cur.fetchall()
-        print(row)
         if not row:
             return "no hay cajas"
   

@@ -68,17 +68,24 @@ CREATE TABLE CashierUsers (
 ) 
 
 
-CREATE TABLE "turns" (
+CREATE TABLE "Turns" (
 	"TurnsID"	INTEGER,
-	"Identification"	varchar(15) NOT NULL,
+	"IdentificationClient"	varchar(15) NOT NULL,
+  "UserID"	INTEGER ,
 	"Description"	TEXT,
-	"CreatedAt"	datetime NOT NULL DEFAULT (datetime('now')),
-	"UpdateAt"	datetime,
-	"DeletedAt"	datetime,
+  "AvailableAt"	datetime NOT NULL DEFAULT (datetime('now')),
+	"AttendedAt"	datetime,
+	"FinishedAt"	datetime,
 	"status"	varchar(15) NOT NULL DEFAULT available,
 	"IsEnabled"	BOOLEAN NOT NULL DEFAULT (true),
 	PRIMARY KEY("TurnsID" AUTOINCREMENT)
 );
+
+-- Available
+-- Attending
+-- Finished
+-- --------------------------------------------------------
+
 
 CREATE TABLE "FinishedShift" (
 	"FinishedShiftID"	INTEGER,
@@ -92,11 +99,6 @@ CREATE TABLE "FinishedShift" (
 	PRIMARY KEY("FinishedShiftID" AUTOINCREMENT)
 );
 
-
--- Available
--- Attending
--- Finished
--- --------------------------------------------------------
 
 SELECT * FROM InfoBusiness
 

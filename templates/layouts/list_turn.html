@@ -2,12 +2,12 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>Servicio</title>
+  <title>Lista de Turnos</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'>
   <link rel="stylesheet"  href= "{{ url_for('static',filename='styles/style.css') }}">
-  <meta http-equiv="refresh" content="10">
+  <!-- <meta http-equiv="refresh" content="10"> -->
 
 <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet" href="./style.css"> -->
 
@@ -16,12 +16,12 @@
     <div style="text-align:center;   display: flex; justify-content: center; height: auto; width: auto;" >
                        <TABLE BORDER style="background-color: #fff; size: 100%;" >
                             <TR>
-                                <TH style="padding-left:5px;padding-bottom:3px; font-size: 125px" >CAJA</TH> <TH  style="padding-left:5px;padding-bottom:3px; font-size:  125px">TURNO</TH>
+                                <TH style="padding-left:5px;padding-bottom:3px; font-size: 120px" >CAJA</TH> <TH  style="padding-left:5px;padding-bottom:3px; font-size:  120px">TURNO</TH>
                             </TR>
                             {%if data %}
                             {% for row in data %}
                             <TR>
-                                <TD  style="padding-left:5px;padding-bottom:3px; font-size: 110px">{{row.0}}</TD> <TD style="padding-left:5px;padding-bottom:3px; font-size: 110px; text-align: center;">{{row.1}}</TD> 
+                                <TD  style="padding-left:5px;padding-bottom:3px; font-size: 90px">{{row.0}}</TD> <TD style="padding-left:5px;padding-bottom:3px; font-size: 90px; text-align: center;">{{row.1}}</TD> 
                             </TR>
                             {%endfor%}
                             {% endif %}

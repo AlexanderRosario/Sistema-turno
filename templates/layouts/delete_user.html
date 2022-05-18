@@ -19,11 +19,14 @@
                           <div class="card card-body">
                             <div  class="form-group required">
                                 <br>
-                               {%if update%}
+                               <!-- {%if update%}
                                   <h3 style="color:#cd4321"; >{{update}}</h3>
-                                {%endif%} 
+                                {%endif%}  -->
+                                {%if error%}
+                                <h4 style="color:#d92a21"; >{{error}}</h4>
+                              {%endif%}
                                 {%if deleted%}
-                                  <h3 style="color:#0bd83b"; >{{update}}</h3>
+                                  <h3 style="color:#0bd83b"; >{{deleted}}</h3>
                                 {%endif%}
                            
 

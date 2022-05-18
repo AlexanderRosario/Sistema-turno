@@ -92,6 +92,9 @@ def cashier():
 @app.route('/cashier',methods=['POST'])
 def cashier_post():
 
+    if   not request.form['namecashier']:
+        return render_template('layouts/cashier.html',error ="Se debe llenar el campo")
+
     if InsertCashier(request.form['namecashier'])!= True:
         return render_template('layouts/cashier.html',error ="Se ha producido un error")
     return render_template('layouts/cashier.html',messaje = "Se ha creado la caja")
@@ -113,19 +116,25 @@ def turn_post():
     if insertTurn(request.form['ident'],request.form['description']) != True:
 
         return render_template('layouts/turn.html',error = "No se pudo generar el turno.")
-    return redirect(url_for('selectnewturn',ident =request.form['ident']))
+        # return redirect(url_for('selectnewturn',ident =request.form['ident']))
+
+    num_turn = SelectNewTurn(request.form['ident'])
+    if not num_turn:
+        return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
+
+    return render_template('layouts/viewturn.html',num_turn = num_turn[0])
         # render_template('layouts/viewturn.html',error = "Debe llenar la casilla de la Identificacion.")
 
 
 
-@app.route('/viewturn',methods=['GET'])
-def selectnewturn():
+# @app.route('/viewturn',methods=['GET'])
+# def selectnewturn():
     
-    num_turn = SelectNewTurn(request.args.get('ident'))
+#     num_turn = SelectNewTurn(request.args.get('ident'))
 
-    if not num_turn  :
-        return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
-    return render_template('layouts/viewturn.html', num_turn = num_turn[0])
+#     if not num_turn  :
+#         return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
+#     return render_template('layouts/viewturn.html', num_turn = num_turn[0])
 
 
 
@@ -134,6 +143,8 @@ def CashierService():
 
     if not request.args.get("cashiername"):
         return redirect(url_for('Login'))
+
+
     return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=0)
     # redirect(url_for('service'),user)
 
@@ -144,13 +155,13 @@ def NextTurn():
    
     if InsertAttendedTurn(request.form['userid'],request.form['num_turn'],request.form['description']) != True:
         # no se pudo finalizar la transacion
-        return render_template('layouts/cashier_service.html',cashiername = request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir seccion" )
+        return render_template('layouts/cashier_service.html',cashiername = request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir sesion" )
    
     num_turn = SelectShift(request.form['userid'])
 
     if not num_turn:
         # no puedo encontrar un tur no nuevo 
-        return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="No hay turnos disponible espera uno" )
+        return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=None,error="No hay turnos disponible, espera uno..." )
     return render_template('layouts/cashier_service.html',cashiername= request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn= num_turn[0])
 
 
@@ -170,6 +181,16 @@ def InfoBusiness():
         return render_template('layouts/info_business.html',error="No hay Informacion registrada" )
 
     return render_template('layouts/info_business.html',data=Info_Business)
+
+
+
+# @app.route('/get_ip', methods=['GET'])
+# def get_tasks():
+#     if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+#         return {'ip': request.environ['REMOTE_ADDR']}, 200
+#     else:
+#         return {'ip': request.environ['HTTP_X_FORWARDED_FOR']}, 200
+
 
 
 
@@ -201,13 +222,15 @@ def EditCashier():
         return render_template('layouts/edit_cashier.html',data=select_cashier())
 
     elif request.method == 'POST':
+        if   not request.form['id_caja'] or  not request.form['name']:
+            return render_template('layouts/edit_cashier.html',error ="Se deben completar los campo",data=select_cashier())
         
         if Updatecashier(request.form['id_caja'],request.form['name']):
 
 
             return render_template('layouts/edit_cashier.html',update="Actualizado la caja",data=select_cashier())
 
-        return redirect(url_for('EditCashier'),update="No se puedo modificar",data=select_cashier()) 
+        return redirect(url_for('EditCashier'),update="No se pudo modificar",data=select_cashier()) 
 
 
 
@@ -217,10 +240,13 @@ def deletCashier():
         return render_template('layouts/delete_cashier.html',data=select_cashier())
 
     elif request.method == 'POST':
+        if   not request.form['id_caja']:
+            return render_template('layouts/delete_cashier.html',error ="Deben Selecionar un campo",data=select_cashier())
+
         if Deletecashier(request.form['id_caja']):
             return render_template('layouts/delete_cashier.html',deleted="Se ha Eliminado la caja",data=select_cashier())
 
-        return render_template ('layouts/delete_cashier.html',update="No se puedo Eliminar",data=select_cashier())
+        return render_template ('layouts/delete_cashier.html',error="No se puedo Eliminar",data=select_cashier())
 
 @app.route('/editUser',methods=['GET','POST'])
 def EditUser():
@@ -231,12 +257,13 @@ def EditUser():
         if not request.form['name']:
             return render_template('layouts/edit_user.html',error="No deje ningun campo vacio",cajas=select_cashier()) 
         
-        if UpdateUser(request.form['id_user'],request.form['name'],request.form['id_caja']):
+        if UpdateUser(request.form['id_user'],request.form['name'],request.form['id_caja'])!= True:
+            return  render_template('layouts/edit_user.html',error="No se puedo modificar",cajas=select_cashier()) 
 
 
-            return render_template('layouts/edit_user.html',update="Se actualizo el usuario",cajas=select_cashier(),users=SelectUsers())
+        return render_template('layouts/edit_user.html',update="Se actualizo el usuario",cajas=select_cashier(),users=SelectUsers())
 
-        return  render_template('layouts/edit_user.html',error="No se puedo modificar",cajas=select_cashier()) 
+        
 
 
 @app.route('/deleteUser',methods=['GET','POST'])
@@ -248,15 +275,20 @@ def DeleteUser():
         if not request.form['id_user']:
             return render_template('layouts/delete_user.html',error="No deje ningun campo vacio",cajas=select_cashier()) 
         
-        if DeleteUserSql(request.form['id_user']):
+        if DeleteUserSql(request.form['id_user'])!= True:
+            return  render_template('layouts/delete_user.html',error="No se puedo Eliminar",cajas=select_cashier())
 
-            return render_template('layouts/delete_user.html',deleted="Se elimino el usuario",cajas=select_cashier(),users=SelectUsers())
+        return render_template('layouts/delete_user.html',deleted="Se elimino el usuario",users=SelectUsers())
 
-        return  render_template('layouts/delete_user.html',error="No se puedo Eliminar",cajas=select_cashier()) 
+         
 
 @app.route('/heatmap',methods=['GET'])
 def HeatMap():
+    # value = df_frame()
+    # if value['is_success']:
     return render_template('layouts/heatmap.html') 
+    # return "Error con la visual"
+
 
 @app.after_request
 def log_the_status_code(response):

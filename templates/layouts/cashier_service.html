@@ -31,11 +31,11 @@
                         {% if error %}
                                     <center> <p  style="color:#e10f0f";>{{error}} </p></center>
                             {% endif %} 
-                        
+                            
                         <label style="font-size: 30px" >Cajero: {{username}}</label>
                         <br>
                         <br>
-                        <center><label style="font-size: 40px">Turno: {{num_turn}} </label></center>
+                        <center><label style="font-size: 40px">Turno: {% if num_turn %} {{num_turn}} {% endif %} </label></center>
                         
                         <input type="text" class="form-control text-lowercase" id="descrption" placeholder="Descripcion"  name="description" required>
                         <input hidden name="cashiername" value="{{cashiername}}">
