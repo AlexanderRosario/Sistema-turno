@@ -9,8 +9,7 @@ from models.insert_turn import insertTurn
 from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
 from helpers.select_turn import (SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,
-UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql)
-from helpers.heatmap import df_frame
+UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql,Services)
 app = Flask(__name__)
 CORS(app)
 
@@ -43,7 +42,7 @@ def PostLogin():
     user = ValidateUser(request)
     if type(user) != dict:
 
-        return user
+        return render_template('layouts/login.html',error='No se encuentra el usuario.')
 
     if user["rol"] =="admin":
         return redirect(url_for('menu')) 
@@ -55,7 +54,7 @@ def PostLogin():
         #             "cashiername": caja[0]}
         
         return redirect(url_for(endpoint='CashierService',cashiername=user["cashiername"],username=user["username"],userid=user['id']))
-    return redirect(url_for('Login')) 
+    return render_template('layouts/login.html')
 
 
 
@@ -103,7 +102,7 @@ def cashier_post():
 
 @app.route('/turn',methods=['GET'])
 def turn():
-    return render_template('layouts/turn.html')
+    return render_template('layouts/turn.html',services=Services())
 
 
 
@@ -112,7 +111,7 @@ def turn_post():
 
     if not request.form['ident']:
         return render_template('layouts/turn.html',error = "Debe llenar la casilla de la Identificacion.")
-    
+
     if insertTurn(request.form['ident'],request.form['description']) != True:
 
         return render_template('layouts/turn.html',error = "No se pudo generar el turno.")
@@ -127,25 +126,23 @@ def turn_post():
 
 
 
-# @app.route('/viewturn',methods=['GET'])
-# def selectnewturn():
-    
-#     num_turn = SelectNewTurn(request.args.get('ident'))
-
-#     if not num_turn  :
-#         return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
-#     return render_template('layouts/viewturn.html', num_turn = num_turn[0])
-
-
-
 @app.route('/service',methods=['GET'])
 def CashierService():
 
     if not request.args.get("cashiername"):
         return redirect(url_for('Login'))
 
+    
+    num_turn = SelectShift(request.args.get("userid"))
+    if not num_turn:
+        # no puedo encontrar un tur no nuevo 
+        return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=None,error="No hay turnos disponible, espera uno..." )
+    
 
-    return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=0)
+    return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=num_turn[0])
+
+    # num_turn = SelectShift(request.form['userid'])
+    # return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=num_turn)
     # redirect(url_for('service'),user)
 
 
@@ -155,7 +152,7 @@ def NextTurn():
    
     if InsertAttendedTurn(request.form['userid'],request.form['num_turn'],request.form['description']) != True:
         # no se pudo finalizar la transacion
-        return render_template('layouts/cashier_service.html',cashiername = request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=request.form['num_turn'],error="ya existe este registro intenta cerrar y abrir sesion" )
+        return render_template('layouts/cashier_service.html',cashiername = request.form.get('cashiername'),username=request.form.get('username'),userid=request.form.get("userid"),num_turn=0,error="ya existe este registro intenta cerrar y abrir sesion" )
    
     num_turn = SelectShift(request.form['userid'])
 
@@ -200,14 +197,12 @@ def EditInfoBusiness():
     Info_Business = SelectInfoBusinness()
 
     if request.method == 'GET':
-        print('HOLA1')
         if not Info_Business:
              return render_template('layouts/cashier_service.html',error="No hay turnos disponible espera uno" )
              
         return render_template('layouts/edit_info_business.html',data=Info_Business)
         
     elif request.method == 'POST':
-        # print(request.form['name'])
 
         if UpdateInfoBusiness(request.form['id'],request.form['name'],request.form['addres'],request.form['phone'],request.form['email']):
         

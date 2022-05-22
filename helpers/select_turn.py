@@ -12,24 +12,27 @@ def SelectShift(userid):
     sql= '''WITH  available as (SELECT turnsID,AvailableAt FROM Turns WHERE IsEnabled = 1 AND Status = 'available')
                 SELECT * from available WHERE AvailableAt = ( select MIN(AvailableAt) from available) '''
     row = QuerySelectOne(sql)
-    print(row)
+
+
     if not row:
         return row
+    if turns_is_attending(userid,row[0]):
+        return row
 
+def turns_is_attending(userid,turnsid):
     query_for_view_windows = '''UPDATE Turns SET UserID = {0}, status = 'attending',AttendedAt = DateTime('now') 
-                    WHERE TurnsID = {1} '''.format(userid,row[0])
-    print(query_for_view_windows)
+                    WHERE TurnsID = {1} '''.format(userid,turnsid)
     valid = InsertAndUpdate(query_for_view_windows) 
 
     if valid !=True :
         return valid
 
-    
+    return True
     # sql_update = '''UPDATE Turns SET  status = 'attending' , AttendedAt = DateTime('now') WHERE turnsID = '{}' '''.format(row[0])
     # valid = InsertAndUpdate(sql_update)
     # if valid != True:
     #     return  valid
-    return row
+    # return row
 
 
 
@@ -103,5 +106,11 @@ def UpdateUser(id_user,username,id_caja):
 def DeleteUserSql(id_user):
     sql_update = '''UPDATE users SET  IsEnabled=0
                                                 WHERE UserID = '{0}' AND IsEnabled = 1'''.format(id_user)
-    print(sql_update)
+  
     return  InsertAndUpdate(sql_update)
+
+
+def Services():
+    sql = ''' SELECT ServiceID,ServiceName FROM Services WHERE IsEnabled = 1;'''
+    
+    return SelectList(sql)

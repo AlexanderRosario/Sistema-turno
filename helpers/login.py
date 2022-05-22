@@ -10,7 +10,7 @@ def ValidateUser( request):
     :return: project id
     """
     sql = '''SELECT UserID, UserName,Password,userRol FROM  Users WHERE UserName = '{}' AND IsEnabled = 1 '''.format(request.form['username'])
-    # print(sql)
+
     conn = ConectionDB()
     
     try:
@@ -18,7 +18,7 @@ def ValidateUser( request):
         cur = conn.cursor()
         cur.execute(sql)
         row = cur.fetchone()
-        # print(row)
+        print(row)
         if not row:
             return "Ususario no registrado"
         # print(row[1])   
@@ -31,7 +31,7 @@ def ValidateUser( request):
 
         caja = SelectUserCashier(conn,row[0])
         # print(row)
-        # print(caja)
+        print(caja)
         dict_user = {"id":row[0],
                     "username":row[1],
                     "rol":row[3],
@@ -43,14 +43,14 @@ def ValidateUser( request):
         print(e)
     
 def SelectUserCashier(conn,id):
-    sql = '''SELECT   Cashiers.Name from CashierUsers INNER join  Cashiers on Cashiers.CashierID = CashierUsers.CashierID where CashierUsers.UserID ={} AND CashierUsers.IsEnabled = 1'''.format(id)
+    sql = '''SELECT Cashiers.Name from CashierUsers INNER join  Cashiers on Cashiers.CashierID = CashierUsers.CashierID where CashierUsers.UserID ={} AND CashierUsers.IsEnabled = 1'''.format(id)
     
     try:
         
         cur = conn.cursor()
         cur.execute(sql)
         rowcashier = cur.fetchone()
-        print(rowcashier)
+        
         if not rowcashier:
             return None
   

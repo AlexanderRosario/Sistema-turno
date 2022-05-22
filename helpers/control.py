@@ -51,7 +51,6 @@ def SelectList(query_select):
         cur = conn.cursor()
         cur.execute(query_select)
         row = cur.fetchall()
-        print(row)
         if not row:
             return None
         
