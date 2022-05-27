@@ -10,6 +10,7 @@ from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
 from helpers.select_turn import (SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,
 UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql,Services)
+from helpers.ticket_pdf import generate_pdf
 app = Flask(__name__)
 CORS(app)
 
@@ -108,19 +109,22 @@ def turn():
 
 @app.route('/turn',methods=['POST'])
 def turn_post():
+    services = Services()
 
     if not request.form['ident']:
-        return render_template('layouts/turn.html',error = "Debe llenar la casilla de la Identificacion.")
+        return render_template('layouts/turn.html',error = "Debe llenar la casilla de la Identificacion.",services=services)
 
     if insertTurn(request.form['ident'],request.form['description']) != True:
 
-        return render_template('layouts/turn.html',error = "No se pudo generar el turno.")
+        return render_template('layouts/turn.html',error = "No se pudo generar el turno.",services=services)
         # return redirect(url_for('selectnewturn',ident =request.form['ident']))
 
     num_turn = SelectNewTurn(request.form['ident'])
     if not num_turn:
-        return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles")
-
+        return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles",services=services)
+    
+    if generate_pdf(num_turn[0],services[request.form['description']]) != True:
+        return render_template('layouts/turn.html',error = "No se pudo generar el ticket",services=services)
     return render_template('layouts/viewturn.html',num_turn = num_turn[0])
         # render_template('layouts/viewturn.html',error = "Debe llenar la casilla de la Identificacion.")
 
