@@ -241,6 +241,8 @@ def deletCashier():
 
         return render_template ('layouts/delete_cashier.html',error="No se puedo Eliminar",data=select_cashier())
 
+
+
 @app.route('/editUser',methods=['GET','POST'])
 def EditUser():
     if request.method == 'GET':
