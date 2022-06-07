@@ -30,6 +30,9 @@
           <button class="menu-li" onClick="location.href='/infbusiness'"> Informacionde la empresa</button>
           <button class="menu-li" onClick="location.href='/heatmap'"> HEATMAP</button>
           <button class="menu-li" onClick="location.href='/reset'"> Resetear Turnos</button>
+          {% if success %}
+            <center><h3><p style="color:#3ddc0c";>{{success}}</p></h3></center>
+          {%endif%}
           </ul>
         </div>
       </div><!--contenedor-->

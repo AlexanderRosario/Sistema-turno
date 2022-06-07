@@ -1,4 +1,3 @@
-from cmath import inf
 from flask import Flask, render_template, request,redirect, url_for
 from flask_cors import CORS
 from config import config
@@ -9,7 +8,8 @@ from models.insert_turn import insertTurn
 from models.insert_finished_shift import InsertAttendedTurn
 from helpers.cashier import select_cashier
 from helpers.select_turn import (SelectNewTurn,SelectShift,SelectListTurn,SelectInfoBusinness,
-UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql,Services)
+UpdateInfoBusiness,Updatecashier,Deletecashier,SelectUsers,UpdateUser,DeleteUserSql,Services,Truncate_table,
+reset_table)
 from helpers.ticket_pdf import generate_pdf
 app = Flask(__name__)
 CORS(app)
@@ -122,11 +122,11 @@ def turn_post():
     num_turn = SelectNewTurn(request.form['ident'])
     if not num_turn:
         return render_template( 'layouts/viewturn.html' ,error = "No hay turnos disponibles",services=services)
-    
-    if generate_pdf(num_turn[0],services[request.form['description']]) != True:
+    print(num_turn)
+    if generate_pdf(num_turn[0],request.form['description']) != True:
         return render_template('layouts/turn.html',error = "No se pudo generar el ticket",services=services)
-    return render_template('layouts/viewturn.html',num_turn = num_turn[0])
-        # render_template('layouts/viewturn.html',error = "Debe llenar la casilla de la Identificacion.")
+    return render_template('layouts/viewturn.html',success = "Se ha gerado el PDF" , num_turn = num_turn[0])
+    #     render_template('layouts/viewturn.html',error = "Debe llenar la casilla de la Identificacion.")
 
 
 
@@ -139,16 +139,10 @@ def CashierService():
     
     num_turn = SelectShift(request.args.get("userid"))
     if not num_turn:
-        # no puedo encontrar un tur no nuevo 
-        return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=None,error="No hay turnos disponible, espera uno..." )
-    
+        # no puedo encontrar un turno nuevo 
+        return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username = request.args.get("username"),userid=request.args.get("userid"),num_turn=None,error="No hay turnos disponible, espera uno..." )
 
-    return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=num_turn[0])
-
-    # num_turn = SelectShift(request.form['userid'])
-    # return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username=request.args.get("username"),userid=request.args.get("userid"),num_turn=num_turn)
-    # redirect(url_for('service'),user)
-
+    return render_template('layouts/cashier_service.html',cashiername=request.args.get("cashiername"),username = request.args.get("username"),userid=request.args.get("userid"),num_turn=num_turn[0])
 
 
 @app.route('/service',methods=['POST'])
@@ -268,18 +262,31 @@ def EditUser():
 @app.route('/deleteUser',methods=['GET','POST'])
 def DeleteUser():
     if request.method == 'GET':
-        return render_template('layouts/delete_user.html',users=SelectUsers())
+        return render_template('layouts/delete_user.html' ,users = SelectUsers())
 
     elif request.method == 'POST':
         if not request.form['id_user']:
-            return render_template('layouts/delete_user.html',error="No deje ningun campo vacio",cajas=select_cashier()) 
+            return render_template('layouts/delete_user.html' ,error = "No deje ningun campo vacio" ,cajas = select_cashier()) 
         
         if DeleteUserSql(request.form['id_user'])!= True:
-            return  render_template('layouts/delete_user.html',error="No se puedo Eliminar",cajas=select_cashier())
+            return  render_template('layouts/delete_user.html' ,error = "No se puedo Eliminar" ,cajas = select_cashier())
 
-        return render_template('layouts/delete_user.html',deleted="Se elimino el usuario",users=SelectUsers())
+        return render_template('layouts/delete_user.html' ,deleted = "Se elimino el usuario" ,users = SelectUsers())
 
-         
+
+
+@app.route('/reset',methods=['GET'])
+def Reset():
+    if Truncate_table() != True:
+        return redirect(url_for('menu'))
+    if reset_table() != True:
+        return redirect(url_for('menu'))
+    return render_template('layouts/menu.html', success = " Se reiniciaron los turnos.")
+
+
+
+
+
 
 @app.route('/heatmap',methods=['GET'])
 def HeatMap():

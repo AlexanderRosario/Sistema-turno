@@ -114,3 +114,13 @@ def Services():
     sql = ''' SELECT ServiceID,ServiceName FROM Services WHERE IsEnabled = 1;'''
     
     return SelectList(sql)
+
+def Truncate_table():
+    sql = '''DELETE from Turns;'''
+    
+    return InsertAndUpdate(sql)
+
+def reset_table():
+    sql = '''DELETE FROM sqlite_sequence WHERE name = 'Turns' ;'''
+    
+    return InsertAndUpdate(sql)

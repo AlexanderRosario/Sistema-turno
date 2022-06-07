@@ -4,18 +4,16 @@ from reportlab.lib.units import inch
 
 
 def generate_pdf(turn=None,service=None):
-    print(service)
-    c = canvas.Canvas(f'ticket/{service}{str(turn)}.pdf',pagesize=(3*inch ,5*inch))
+    service_name = service.split(",")[1]
+    print(service_name)
+    c = canvas.Canvas(f'ticket/{service_name }{str(turn)}.pdf',pagesize=(3*inch ,5*inch))
     # c.line(108, 360, 108,0)
     # c.line(135, 360, 135,0)
-    print(3*inch ,5*inch)
+    # print(3*inch ,5*inch)
     x = c._pagesize[0] / 2
     try:
         c.setLineWidth(.3)
         fontsize = 20
-        # c.setFont('Helvetica', 20)
-        # c.drawString(position_x('TICKET',fontsize),330,'TICKET')
-        # print((216-len('TICKET')*12.5)/2)
         c.setFont('Helvetica', 20)
         c.drawCentredString(x,300,'TURNO')
         fontsize = 30
@@ -29,14 +27,15 @@ def generate_pdf(turn=None,service=None):
         c.setFont('Helvetica', fontsize)
         
         
-        c.drawCentredString(x,205,f'{service}')
+        c.drawCentredString(x,205,service_name)
         # print(108-35)
         
     # c.setFont('Helvetica', 20)
-    # c.drawString(100,330,f'{service}')
+    # c.drawString(100,330,f'{service_name }')
     
         c.save()
     except Exception as e:
+        print(e)
         return None
 
     return True
@@ -49,4 +48,4 @@ def generate_pdf(turn=None,service=None):
 #     return empty_space / 2
 
 
-# generate_pdf(turn=10,service="Servicio")
+# generate_pdf(turn=10,service_name ="Servicio")

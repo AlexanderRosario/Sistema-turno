@@ -25,6 +25,7 @@
                                       {% if error %}
                                       <center><p style="color:#FF0000";>{{error}}</p></center>
                                       {%endif%}
+                                      
                                       <input type="text" class="form-control text-lowercase" maxlength="11" minlength="6" placeholder="Sin guion" id="username" name="ident" value=""  required >
                                   </div>   
                                   <div class="form-group required">
@@ -34,7 +35,7 @@
                                         <select name="description" class="selectpicker form-control">
                                           <div>
                                             {% for service in services %}
-                                            <option value="{{ service.0 }}">{{ service.1}}</option>
+                                            <option value="{{ service.0 }},{{service.1}}">{{ service.1}}</option>
                                               {% endfor %}
                                             <!-- <option value="Deposito">Deposito</option>
                                             <option value="Retiro">Retiro</option>
